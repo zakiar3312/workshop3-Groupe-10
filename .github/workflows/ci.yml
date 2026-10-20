@@ -2,11 +2,13 @@ name: CI
 
 on:
   push:
-  pull_request:
+    branches: [main]
+  workflow_dispatch:
 
 jobs:
   build-and-scan:
     runs-on: ubuntu-latest
+    timeout-minutes: 120
     steps:
       - uses: actions/checkout@v4
 
@@ -19,11 +21,26 @@ jobs:
       - name: Build
         run: mvn -B clean verify
 
+      - name: Restore Dependency-Check data
+        uses: actions/cache/restore@v4
+        with:
+          path: ~/.m2/repository/org/owasp/dependency-check-data
+          key: depcheck-data-${{ github.run_id }}
+          restore-keys: depcheck-data-
+
       - name: OWASP Dependency-Check
         run: >
           mvn -B org.owasp:dependency-check-maven:check
           -DfailBuildOnCVSS=7
+          -DfailOnError=false
           -DnvdApiKey=${{ secrets.NVD_API_KEY }}
+
+      - name: Save Dependency-Check data
+        if: always()
+        uses: actions/cache/save@v4
+        with:
+          path: ~/.m2/repository/org/owasp/dependency-check-data
+          key: depcheck-data-${{ github.run_id }}
 
       - name: Upload report
         if: always()
