@@ -1,7 +1,7 @@
 # Workshop 3 – Sécurité des dépendances (Dependabot & OWASP Dependency-Check)
 
 **Groupe :** 10
-**Membres :** Zakaria Aribi , Zakaria Mouada
+**Membres :** Zakaria Aribi , Zakaria Mouada , Jihane Diouri
 
 ## 1. Objectif
 Sécuriser les dépendances d'un projet Maven (Spring Boot) avec Dependabot pour les mises à jour automatiques et OWASP Dependency-Check pour la détection des vulnérabilités, le tout intégré dans un pipeline CI/CD GitHub Actions.
